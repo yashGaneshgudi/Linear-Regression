@@ -1,0 +1,58 @@
+import random
+from matplotlib import pyplot as plt
+import numpy as np
+
+#Static m,c used to generate data
+mStatic = random.randint(-1000,1000)
+cStatic = random.randint(-1000,1000)
+
+#Range of x-values from 0-180
+X = 180
+iterations=200
+
+#Data Generation with Noise(random function)
+
+database = []
+for i in range(X):
+    # HINT To make the data more spread out increase the numbers inside the random function.
+    y = mStatic * i + cStatic + random.randint(-7500, 7500)
+    database.append([i, y])
+
+#Error Function
+def errorFunction(m,c):
+    error=0
+    for i in range(X):
+        error +=(database[i][1] - m*i - c)**2
+    return error/X
+
+#Derivatives
+def dm(m,c):
+    sum=0
+    for i in range(X):
+        sum += (m * i + c - database[i][1])*i
+    return 2*sum/X
+def de(m,c):
+    sum=0
+    for i in range(X):
+        sum += (m * i + c - database[i][1])
+    return 2*sum/X
+
+#Starting m,c value
+m=1
+c=1
+
+#Gradient Descent
+for i in range(iterations):
+    errorFunction(m,c)
+    m=m-dm(m,c)*0.0001
+    c=c-de(m,c)*0.1
+
+
+plt.scatter(*zip(*database))
+x = np.linspace(0, X)
+plt.plot(x, mStatic * x + cStatic, '-r',label = 'Static')
+plt.plot(x, m* x + c, '-b',label='Prediction')
+plt.legend()
+plt.show()
+
+print(round((errorFunction(mStatic,cStatic)-errorFunction(m,c))/errorFunction(mStatic,cStatic)*100,3),'% Accuracy')
