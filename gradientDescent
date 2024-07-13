@@ -61,7 +61,7 @@ plt.show()
 
 print(
     round(
-        (errorFunction(mStatic, cStatic) - errorFunction(m, c))
+        100 - (errorFunction(mStatic, cStatic) - errorFunction(m, c))
         / errorFunction(mStatic, cStatic)
         * 100,
         3,
