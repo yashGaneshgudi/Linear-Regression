@@ -1,6 +1,8 @@
-# Gradient-Descent-in-3D
+# Gradient-Descent
 ![image](https://github.com/user-attachments/assets/2e73d116-f501-4b27-8918-997df8eb1bad)
 
+![image](https://github.com/user-attachments/assets/f5844f75-6277-4af8-8fdd-7f71bbd6083c)
+3D Visualisation with datapoints (x,y,z)
 
 gradientDescent file shows a gradient descent with 2 random m,c values.
 
