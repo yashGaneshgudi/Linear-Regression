@@ -1,0 +1,138 @@
+import random
+
+# Static m,c used to generate data
+mStatic = random.randint(-1000, 1000)
+cStatic = random.randint(-1000, 1000)
+m2Static = random.randint(-1000, 1000)
+c2Static = random.randint(-1000, 1000)
+m3Static = random.randint(-1000, 1000)
+c3Static = random.randint(-1000, 1000)
+m4Static = random.randint(-1000, 1000)
+c4Static = random.randint(-1000, 1000)
+
+
+# Range of x-values from 0-180
+X = 180
+iterations = 200
+
+# Data Generation with Noise(random function)
+
+database = []
+for i in range(X):
+    # HINT To make the data more spread out increase the numbers inside the random function.
+    y = mStatic * i + cStatic + random.randint(-750, 700)
+    z = m2Static * i + c2Static + random.randint(-750, 750)
+    w = m3Static * i + c3Static + random.randint(-750, 750)
+    v = m4Static * i + c4Static + random.randint(-750, 750)
+    database.append([i, y, z, w, v])
+
+# Error Function
+def errorFunction(m, c, id):
+    error = 0
+    for i in range(X):
+        error += (database[i][id] - m * i - c) ** 2
+    return error / X
+
+
+# Derivatives
+def dm(m, c, id):
+    sum = 0
+    for i in range(X):
+        sum += (m * i + c - database[i][id]) * i
+    return 2 * sum / X
+
+
+def dc(m, c, id):
+    sum = 0
+    for i in range(X):
+        sum += m * i + c - database[i][id]
+    return 2 * sum / X
+
+
+# Starting m,c value
+m = 1
+c = 1
+m2 = 1
+c2 = 1
+m3 = 1
+c3 = 1
+m4 = 1
+c4 = 1
+
+# Gradient Descent
+for i in range(iterations):
+    m = m - dm(m, c, 1) * 0.00001
+    c = c - dc(m, c, 1) * 0.0001
+    m2 = m2 - dm(m2, c2, 2) * 0.000001
+    c2 = c2 - dc(m2, c2, 2) * 0.0001
+    m3 = m3 - dm(m3, c3, 3) * 0.000001
+    c3 = c3 - dc(m3, c3, 3) * 0.0001
+    m4 = m4 - dm(m4, c4, 4) * 0.000001
+    c4 = c4 - dc(m4, c4, 4) * 0.0001
+
+print()
+print(
+    "m1Static:",
+    mStatic,
+    " prediction ",
+    m,
+    "  accuracy ",
+    (m - mStatic) / mStatic * 100,
+)
+print(
+    "m2Static:",
+    m2Static,
+    " prediction ",
+    m2,
+    "  accuracy ",
+    (m2 - m2Static) / m2Static * 100,
+)
+print(
+    "m3Static:",
+    m3Static,
+    " prediction ",
+    m3,
+    "  accuracy ",
+    (m3 - m3Static) / m3Static * 100,
+)
+print(
+    "m4Static:",
+    m4Static,
+    " prediction ",
+    m4,
+    "  accuracy ",
+    (m4 - m4Static) / m4Static * 100,
+)
+print()
+print(
+    "c1Static:",
+    cStatic,
+    " prediction ",
+    c,
+    "  accuracy ",
+    (c - cStatic) / cStatic * 100,
+)
+print(
+    "c2Static:",
+    c2Static,
+    " prediction ",
+    c2,
+    "  accuracy ",
+    (c2 - c2Static) / c2Static * 100,
+)
+print(
+    "c3Static:",
+    c3Static,
+    " prediction ",
+    c3,
+    "  accuracy ",
+    (c3 - c3Static) / c3Static * 100,
+)
+print(
+    "c4Static:",
+    c4Static,
+    " prediction ",
+    c4,
+    "  accuracy ",
+    (c4 - c4Static) / c4Static * 100,
+)
