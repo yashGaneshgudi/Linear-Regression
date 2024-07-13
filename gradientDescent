@@ -34,7 +34,7 @@ def dm(m, c):
     return 2 * sum / X
 
 
-def de(m, c):
+def dc(m, c):
     sum = 0
     for i in range(X):
         sum += m * i + c - database[i][1]
@@ -49,7 +49,7 @@ c = 1
 for i in range(iterations):
     errorFunction(m, c)
     m = m - dm(m, c) * 0.0001
-    c = c - de(m, c) * 0.1
+    c = c - dc(m, c) * 0.1
 
 
 plt.scatter(*zip(*database))
