@@ -5,6 +5,8 @@
 ![image](https://github.com/user-attachments/assets/f5844f75-6277-4af8-8fdd-7f71bbd6083c)
 3D Visualisation with datapoints (x,y,z)
 
+5 Dimension Example available containing (x, y, z, w, v).See code the m,c values are given with an accuracy% as you can't visualise more dimensions.
+
 gradientDescent file shows a gradient descent with 2 random m,c values.
 
 I encountered diffuculties using the learning rate (a) so theres a program attached to calculate the optimal learning rate(a) based on the amount of iterations done.
