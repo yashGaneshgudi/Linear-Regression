@@ -11,7 +11,11 @@ I encountered diffuculties using the learning rate (a) so theres a program attac
 PATTERN --> the higher the iterations the lower the learning rate!
 My understanding is a high learning rate causes overshooting of values as bigger jumps occur ,so less iterations.
 Whereas a low learning rate slowly finds the optimal solution ,but requires more iterations.
+
+
 ![image](https://github.com/user-attachments/assets/cd04b396-b065-4b8d-93a3-d96668adab1b)
 
+
+An example for 100 iterations.Learning rate near 4 is optimal
 ![image](https://github.com/user-attachments/assets/e354cdb6-8552-4454-8eb0-8b4f5abed709)
 
