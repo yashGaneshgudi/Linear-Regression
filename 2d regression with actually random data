@@ -1,0 +1,56 @@
+from matplotlib import pyplot as plt
+import numpy as np
+
+# Static m,c used to generate data
+mStatic = -669
+cStatic = -239
+
+# Range of x-values from 0-180
+X = 50
+iterations = 200
+
+# Data Generation with Noise(random function)
+
+database = [[25, -22767], [72, -43174], [26, -17075], [38, -31039], [33, -28414], [59, -36976], [49, -32665], [25, -10387], [80, -47193], [44, -29245], [38, -29751], [29, -15348], [6, -3207], [67, -48269], [56, -43306], [29, -19031], [21, -16417], [39, -22128], [52, -39566], [86, -50402], [36, -29076], [60, -36358], [47, -31702], [15, -3573], [41, -33421], [74, -44830], [34, -27977], [3, 149], [66, -48529], [2, -1452], [78, -45916], [1, 3160], [36, -27126], [82, -51850], [3, -3803], [19, -20005], [16, -3865], [13, -11638], [55, -37015], [72, -50551], [100, -64516], [2, -7920], [84, -59616], [44, -28153], [83, -51718], [58, -34864], [17, -6664], [37, -20203], [94, -61192], [29, -23277]]
+
+print(database)
+print()
+print(mStatic,'c',cStatic)
+
+# Error Function
+def errorFunction(m, c):
+    error = 0
+    for i in range(X):
+        error += (database[i][1] - m * database[i][0] - c) ** 2
+    return error / X
+
+# Derivatives
+def dm(m, c):
+    sum = 0
+    for i in range(X):
+        sum += (m * database[i][0] + c - database[i][1]) * i
+    return 2 * sum / X
+def dc(m, c):
+    sum = 0
+    for i in range(X):
+        sum += m * database[i][0] + c - database[i][1]
+    return 2 * sum / X
+
+
+# Starting m,c value
+m = 1
+c = 1
+
+# Gradient Descent
+for i in range(iterations):
+    errorFunction(m, c)
+    m = m - dm(m, c) * 0.0001
+    c = c - dc(m, c) * 0.001
+
+
+plt.scatter(*zip(*database))
+x = np.linspace(0, 100)
+plt.plot(x, mStatic * x + cStatic, "-r", label="Static")
+plt.plot(x, m * x + c, "-b", label="Prediction")
+plt.legend()
+plt.show()
