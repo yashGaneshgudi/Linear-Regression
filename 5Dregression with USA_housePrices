@@ -4,7 +4,7 @@ import numpy as np
 # Range of x-values from 0-180
 iterations = 1000000000
 
-data = pd.read_csv("/content/USA_housePrices.csv")
+data = pd.read_csv("USA_housePrices.csv")
 features = ["bedrooms","bathrooms","sqft_living","sqft_lot","floors"]
 x_train = data.loc[:, features]
 y_train = data.loc[:, ["price"]]
@@ -64,16 +64,16 @@ for i in range(iterations):
     oldc4=c4
     oldm5=m5
     oldc5=c5
-    m = m - dm(m, c, "bedrooms") * 0.00000001
-    c = c - dc(m, c, "bedrooms") * 0.00000001
-    m2 = m2 - dm(m2, c2, "bathrooms") * 0.00000001
-    c2 = c2 - dc(m2, c2, "bathrooms") * 0.00000001
-    m3 = m3 - dm(m3, c3, "sqft_living") * 0.00000001
-    c3 = c3 - dc(m3, c3, "sqft_living") *0.00000001
-    m4 = m4 - dm(m4, c4, "sqft_lot") * 0.00000000001
-    c4 = c4 - dc(m4, c4, "sqft_lot") * 0.00000000001
-    m5 = m5 - dm(m5, c5, "floors") * 0.00000001
-    c5 = c5 - dc(m5, c5, "floors") * 0.00000001
+    m = m - dm(m, c, "bedrooms") * 0.000001
+    c = c - dc(m, c, "bedrooms") * 0.000001
+    m2 = m2 - dm(m2, c2, "bathrooms") * 0.000001
+    c2 = c2 - dc(m2, c2, "bathrooms") * 0.000001
+    m3 = m3 - dm(m3, c3, "sqft_living") * 0.0000001
+    c3 = c3 - dc(m3, c3, "sqft_living") *0.0000001
+    m4 = m4 - dm(m4, c4, "sqft_lot") * 0.0000000001
+    c4 = c4 - dc(m4, c4, "sqft_lot") * 0.0000000001
+    m5 = m5 - dm(m5, c5, "floors") * 0.000001
+    c5 = c5 - dc(m5, c5, "floors") * 0.000001
     print()
     print(i)
     print(m," ",m2," ",m3," ",m4," ",m5)
