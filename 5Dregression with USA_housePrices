@@ -52,7 +52,10 @@ c4 = 0
 m5 = 0
 c5 = 0
 
-# Gradient Descent ["bedrooms","bathrooms","sqft_living","sqft_lot","floors"]
+# Gradient Descent
+a = [0.0000001,0.0000001,0.0000001,0.0000001,0.0000001] #learningRate
+mc = [['m','c'],['m2','c2'],['m3','c3'],['m4','c4'],['m5','c5']]
+oldmc=[['oldm','oldc'],['oldm2','oldc2'],['oldm3','oldc3'],['oldm4','oldc4'],['oldm5','oldc5']]
 for i in range(iterations):
     oldm=m
     oldc=c
@@ -64,22 +67,26 @@ for i in range(iterations):
     oldc4=c4
     oldm5=m5
     oldc5=c5
-    m = m - dm(m, c, "bedrooms") * 0.000001
-    c = c - dc(m, c, "bedrooms") * 0.000001
-    m2 = m2 - dm(m2, c2, "bathrooms") * 0.000001
-    c2 = c2 - dc(m2, c2, "bathrooms") * 0.000001
-    m3 = m3 - dm(m3, c3, "sqft_living") * 0.0000001
-    c3 = c3 - dc(m3, c3, "sqft_living") *0.0000001
-    m4 = m4 - dm(m4, c4, "sqft_lot") * 0.0000000001
-    c4 = c4 - dc(m4, c4, "sqft_lot") * 0.0000000001
-    m5 = m5 - dm(m5, c5, "floors") * 0.000001
-    c5 = c5 - dc(m5, c5, "floors") * 0.000001
+    m = m - dm(m, c, "bedrooms") * a[0]
+    c = c - dc(m, c, "bedrooms") * a[0]
+    m2 = m2 - dm(m2, c2, "bathrooms") *a[1]
+    c2 = c2 - dc(m2, c2, "bathrooms") * a[1]
+    m3 = m3 - dm(m3, c3, "sqft_living") * a[2]
+    c3 = c3 - dc(m3, c3, "sqft_living") *a[2]
+    m4 = m4 - dm(m4, c4, "sqft_lot") * a[3]
+    c4 = c4 - dc(m4, c4, "sqft_lot") * a[3]
+    m5 = m5 - dm(m5, c5, "floors") * a[4]
+    c5 = c5 - dc(m5, c5, "floors") * a[4]
     print()
     print(i)
     print(m," ",m2," ",m3," ",m4," ",m5)
     print('C',c," ",c2," ",c3," ",c4," ",c5)
     print('m1c1',compare(errorFunction(m,c,'bedrooms'),errorFunction(oldm,oldc,'bedrooms')),' m2c2', compare(errorFunction(m2,c2,"bathrooms"),errorFunction(oldm2,oldc2,"bathrooms")) ,' m3c3 ', compare(errorFunction(m3,c3, "sqft_living"),errorFunction(oldm3,oldc3, "sqft_living")) ,' m4c4 ',compare(errorFunction(m4,c4, "sqft_lot"),errorFunction(oldm4,oldc4, "sqft_lot")) ,' m5c5 ', compare(errorFunction(m5,c5, "floors"),errorFunction(oldm5,oldc5, "floors")))
     print()
+    for i in range(5):
+        if compare(errorFunction(eval(mc[i][0]),eval(mc[i][1]),features[i]),errorFunction(eval(oldmc[i][0]),eval(oldmc[i][1]),features[i])) == 'WORSE':
+            a[i]=a[i]/2
+            print(a,'AMENDED ',features[i])
     print()
 
 
