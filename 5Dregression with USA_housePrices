@@ -1,23 +1,29 @@
+# %%
 import pandas as pd
 import numpy as np
+import csv
 
-# Range of x-values from 0-180
-iterations = 1000000000
+# %%
+#Initializes Data
+iterations = 100
 
 data = pd.read_csv("USA_housePrices.csv")
 features = ["bedrooms","bathrooms","sqft_living","sqft_lot","floors"]
 x_train = data.loc[:, features]
 y_train = data.loc[:, ["price"]]
 
-x_train.to_csv("x_train.csv", index=True)
-y_train.to_csv("y_train.csv", index=True)
+x_train.to_csv("x_train.csv", index=False)
+y_train.to_csv("y_train.csv", index=False)
 dataLength = len(open("x_train.csv").readlines()) - 1
-# Error Function
+
+# %%
+#Function
 def errorFunction(m, c, id):
     error = 0
     for i in range(dataLength):
         error += (y_train["price"][i] - m * x_train[id][i] + c) ** 2
     return error / dataLength
+
 # Derivatives
 def dm(m, c, id):
     sum = 0
@@ -31,15 +37,29 @@ def dc(m, c, id):
         sum += m * x_train[id][i] + c - y_train["price"][i]
     return 2 * sum / dataLength
 
+#Error Checking
 def compare(new,old):
     if new < old:
         return 'IMPROVEMENT'
     if new == old:
-        return 'SAME'
+        return 'STABLE'
     else:
         return 'WORSE'
 
+def errorPercentage(m,m2,m3,m4,m5,c,c2,c3,c4,c5):
+    oldError = 0
+    y=0
+    sum=0
+    for i in range(dataLength):
+        y += (m*x_train['bedrooms'][i] + m2*x_train['bathrooms'][i] + m3*x_train['sqft_living'][i] + m4*x_train['sqft_lot'][i] + m5*x_train['floors'][i] + c+c2+c3+c4+c5- y_train["price"][i])
+        sum += y_train["price"][i]
+    print('Error ',y/sum,' %')
+    newError = y/sum
+    print('Error Change ',compare(newError**2,oldError**2), )
+    oldError = newError
+    
 
+# %%
 # Starting m,c value
 m = 0
 c = 0
@@ -53,11 +73,11 @@ m5 = 0
 c5 = 0
 
 # Gradient Descent
-a = [0.0000001,0.0000001,0.0000001,0.0000001,0.0000001] #learningRate
+a = [0.00000001,0.00000001,0.00000001,0.00000001,0.00000001] #learningRate
 mc = [['m','c'],['m2','c2'],['m3','c3'],['m4','c4'],['m5','c5']]
 oldmc=[['oldm','oldc'],['oldm2','oldc2'],['oldm3','oldc3'],['oldm4','oldc4'],['oldm5','oldc5']]
 for i in range(iterations):
-    oldm=m
+    oldm=m#Old m,c used to calculate error rate
     oldc=c
     oldm2=m2
     oldc2=c2
@@ -77,18 +97,38 @@ for i in range(iterations):
     c4 = c4 - dc(m4, c4, "sqft_lot") * a[3]
     m5 = m5 - dm(m5, c5, "floors") * a[4]
     c5 = c5 - dc(m5, c5, "floors") * a[4]
-    print()
-    print(i)
-    print(m," ",m2," ",m3," ",m4," ",m5)
-    print('C',c," ",c2," ",c3," ",c4," ",c5)
+
+    print(i,' Iterations')
+    print('M ',m," ",m2," ",m3," ",m4," ",m5)
+    print('C ',c," ",c2," ",c3," ",c4," ",c5)
     print('m1c1',compare(errorFunction(m,c,'bedrooms'),errorFunction(oldm,oldc,'bedrooms')),' m2c2', compare(errorFunction(m2,c2,"bathrooms"),errorFunction(oldm2,oldc2,"bathrooms")) ,' m3c3 ', compare(errorFunction(m3,c3, "sqft_living"),errorFunction(oldm3,oldc3, "sqft_living")) ,' m4c4 ',compare(errorFunction(m4,c4, "sqft_lot"),errorFunction(oldm4,oldc4, "sqft_lot")) ,' m5c5 ', compare(errorFunction(m5,c5, "floors"),errorFunction(oldm5,oldc5, "floors")))
-    print()
-    for i in range(5):
+    errorPercentage(m,m2,m3,m4,m5,c,c2,c3,c4,c5)
+
+    for i in range(5):#Variable Learning Rate --> Halves learning rate if error increases.
         if compare(errorFunction(eval(mc[i][0]),eval(mc[i][1]),features[i]),errorFunction(eval(oldmc[i][0]),eval(oldmc[i][1]),features[i])) == 'WORSE':
             a[i]=a[i]/2
-            print(a,'AMENDED ',features[i])
-    print()
+            print('learningRate halved ',features[i],' = ',a[i])
+    print("\n"*2)
+
+# %%
+predictedPrices = []
+percentageDifference = []
+
+#Retrieves original data so you can run the cell multiple times
+y_train = data.loc[:, ["price"]]
+y_train.to_csv("y_train.csv", index=False)
+df = pd.read_csv('y_train.csv')
 
 
+for i in range(dataLength):
+    y = m*x_train['bedrooms'][i] + m2*x_train['bathrooms'][i] + m3*x_train['sqft_living'][i] + m4*x_train['sqft_lot'][i] + m5*x_train['floors'][i] + c+c2+c3+c4+c5
+    percentageDifferenceValue = (y - y_train['price'][i])/y_train['price'][i]*100
 
+    predictedPrices.append(y)
+    percentageDifference.append(percentageDifferenceValue)
 
+df['Predicted Prices'] = predictedPrices
+df['Percentage Difference'] = percentageDifference
+df.to_csv('y_train.csv', mode='w', index=False, header=True)
+
+print("predictedPrice , percentageDifference data APPENDED.")
